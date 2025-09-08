@@ -1,0 +1,140 @@
+{% extends "base.html" %}
+
+{% block title %}Market Analytics - D&D Commodity Trading{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Analytics Header -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-dark text-white">
+                <div class="card-body">
+                    <h2 class="card-title mb-1"><i class="fas fa-analytics me-2"></i>Market Intelligence & Analytics</h2>
+                    <p class="card-text mb-0">Deep insights into market trends, volatility, and regional performance</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Key Metrics Row -->
+    <div class="row mb-4">
+        {% for region, performance in regional_performance.items() %}
+        <div class="col-xl-3 col-lg-4 col-md-6 mb-3">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-start mb-2">
+                        <h6 class="card-title mb-0">{{ region }}</h6>
+                        <span class="badge bg-{% if performance.stability == 'Stable' %}success{% else %}warning{% endif %}">
+                            {{ performance.stability }}
+                        </span>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Market Value</small>
+                        <h5 class="mb-0">{{ "%.1f"|format(performance.total_market_value) }}</h5>
+                    </div>
+                    <div class="mb-2">
+                        <small class="text-muted">Avg Change</small>
+                        <h6 class="mb-0 {% if performance.average_change > 0 %}text-success{% elif performance.average_change < 0 %}text-danger{% else %}text-muted{% endif %}">
+                            {{ "%.2f"|format(performance.average_change) }}%
+                        </h6>
+                    </div>
+                    <div>
+                        <small class="text-muted">Last Event</small>
+                        <p class="small mb-0">{{ performance.last_event if performance.last_event != 'None' else 'No recent events' }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Volatility Analysis -->
+    <div class="row mb-4">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h5 class="card-title mb-0"><i class="fas fa-chart-area me-2"></i>Volatility Analysis</h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="volatilityChart"></canvas>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4">
+            <div class="card border-0 shadow-sm h-100">
+                <div class="card-header bg-transparent">
+                    <h5 class="card-title mb-0"><i class="fas fa-exclamation-triangle me-2"></i>High Risk Commodities</h5>
+                </div>
+                <div class="card-body">
+                    {% for commodity, analysis in volatility_analysis.items() %}
+                    {% if analysis.volatility_rating == 'High' %}
+                    <div class="d-flex justify-content-between align-items-center mb-3 p-2 bg-light rounded">
+                        <div>
+                            <strong>{{ commodity.replace('_', ' ').title() }}</strong>
+                            <br>
+                            <small class="text-muted">{{ "%.1f"|format(analysis.average_volatility * 100) }}% volatility</small>
+                        </div>
+                        <span class="badge bg-danger">High Risk</span>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Volatility Chart
+const volatilityCtx = document.getElementById('volatilityChart').getContext('2d');
+const commodityNames = [];
+const baseVolatility = [];
+const currentVolatility = [];
+
+{% for commodity, analysis in volatility_analysis.items() %}
+commodityNames.push('{{ commodity.replace("_", " ").title() }}');
+baseVolatility.push({{ analysis.base_volatility * 100 }});
+currentVolatility.push({{ analysis.average_volatility * 100 }});
+{% endfor %}
+
+new Chart(volatilityCtx, {
+    type: 'bar',
+    data: {
+        labels: commodityNames,
+        datasets: [{
+            label: 'Base Volatility (%)',
+            data: baseVolatility,
+            backgroundColor: 'rgba(54, 162, 235, 0.8)',
+            borderColor: 'rgba(54, 162, 235, 1)',
+            borderWidth: 1
+        }, {
+            label: 'Current Volatility (%)',
+            data: currentVolatility,
+            backgroundColor: 'rgba(255, 99, 132, 0.8)',
+            borderColor: 'rgba(255, 99, 132, 1)',
+            borderWidth: 1
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Commodity Volatility Comparison'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                title: {
+                    display: true,
+                    text: 'Volatility Percentage'
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

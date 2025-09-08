@@ -1,0 +1,103 @@
+{% extends "base.html" %}
+
+{% block title %}Price Charts - D&D Commodity Trading{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Chart Controls -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-success text-white">
+                <div class="card-body">
+                    <h2 class="card-title mb-3"><i class="fas fa-chart-line me-2"></i>Historical Price Analysis</h2>
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-6">
+                            <label for="commodity" class="form-label">Commodity</label>
+                            <select name="commodity" id="commodity" class="form-select">
+                                {% for commodity in commodities.keys() %}
+                                <option value="{{ commodity }}" {% if commodity == selected_commodity %}selected{% endif %}>
+                                    {{ commodity.replace('_', ' ').title() }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="region" class="form-label">Region</label>
+                            <select name="region" id="region" class="form-select">
+                                {% for region in regions %}
+                                <option value="{{ region }}" {% if region == selected_region %}selected{% endif %}>
+                                    {{ region }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-light w-100">
+                                <i class="fas fa-chart-area me-2"></i>Update Chart
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Price Chart -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h5 class="card-title mb-0">
+                        Price History: {{ selected_commodity.replace('_', ' ').title() }} in {{ selected_region }}
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <canvas id="priceHistoryChart" height="100"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Main price history chart
+const priceHistoryCtx = document.getElementById('priceHistoryChart').getContext('2d');
+const priceHistory = {{ market_data[selected_region][selected_commodity]['history']|tojson }};
+const labels = priceHistory.map((_, index) => `Day ${index + 1}`);
+
+new Chart(priceHistoryCtx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: '{{ selected_commodity.replace("_", " ").title() }} Price',
+            data: priceHistory,
+            borderColor: 'rgb(75, 192, 192)',
+            backgroundColor: 'rgba(75, 192, 192, 0.2)',
+            tension: 0.1,
+            fill: true
+        }]
+    },
+    options: {
+        responsive: true,
+        plugins: {
+            title: {
+                display: true,
+                text: 'Price Trend Over Time'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: false,
+                title: {
+                    display: true,
+                    text: 'Price ({{ commodities[selected_commodity]["unit"] }})'
+                }
+            }
+        }
+    }
+});
+</script>
+{% endblock %}

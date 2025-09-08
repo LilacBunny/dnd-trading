@@ -1,0 +1,129 @@
+{% extends "base.html" %}
+
+{% block title %}Trade Routes - D&D Commodity Trading{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <!-- Trade Route Selection -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card bg-gradient-info text-white">
+                <div class="card-body">
+                    <h2 class="card-title mb-3"><i class="fas fa-route me-2"></i>Trade Route Analysis</h2>
+                    <form method="GET" class="row g-3">
+                        <div class="col-md-5">
+                            <label for="export" class="form-label">Export Region</label>
+                            <select name="export" id="export" class="form-select">
+                                {% for region in regions %}
+                                <option value="{{ region }}" {% if region == export_region %}selected{% endif %}>
+                                    {{ region }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-5">
+                            <label for="import" class="form-label">Import Region</label>
+                            <select name="import" id="import" class="form-select">
+                                {% for region in regions %}
+                                <option value="{{ region }}" {% if region == import_region %}selected{% endif %}>
+                                    {{ region }}
+                                </option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-2 d-flex align-items-end">
+                            <button type="submit" class="btn btn-light w-100">
+                                <i class="fas fa-search me-2"></i>Compare
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Profit Opportunities -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header bg-transparent">
+                    <h5 class="card-title mb-0">
+                        <i class="fas fa-coins me-2"></i>
+                        Profit Opportunities: {{ export_region }} → {{ import_region }}
+                    </h5>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table class="table table-hover mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th>Commodity</th>
+                                    <th class="text-center">Export Price</th>
+                                    <th class="text-center">Import Price</th>
+                                    <th class="text-center">Profit Margin</th>
+                                    <th class="text-center">Profit %</th>
+                                    <th class="text-center">Recommendation</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for opportunity in profit_analysis %}
+                                <tr class="{% if opportunity.profit_percentage > 20 %}table-success{% elif opportunity.profit_percentage > 10 %}table-warning{% elif opportunity.profit_percentage < 0 %}table-danger{% endif %}">
+                                    <td class="fw-bold">
+                                        {{ opportunity.commodity.replace('_', ' ').title() }}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if 'gp' in opportunity.unit %}
+                                            {{ "%.2f"|format(opportunity.export_price) }} <span class="text-warning">gp</span>
+                                        {% elif 'sp' in opportunity.unit %}
+                                            {{ "%.2f"|format(opportunity.export_price) }} <span class="text-muted">sp</span>
+                                        {% else %}
+                                            {{ "%.2f"|format(opportunity.export_price) }} <span class="text-secondary">cp</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        {% if 'gp' in opportunity.unit %}
+                                            {{ "%.2f"|format(opportunity.import_price) }} <span class="text-warning">gp</span>
+                                        {% elif 'sp' in opportunity.unit %}
+                                            {{ "%.2f"|format(opportunity.import_price) }} <span class="text-muted">sp</span>
+                                        {% else %}
+                                            {{ "%.2f"|format(opportunity.import_price) }} <span class="text-secondary">cp</span>
+                                        {% endif %}
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="{% if opportunity.profit_margin > 0 %}text-success{% elif opportunity.profit_margin < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                            {% if 'gp' in opportunity.unit %}
+                                                {{ "%.2f"|format(opportunity.profit_margin) }} gp
+                                            {% elif 'sp' in opportunity.unit %}
+                                                {{ "%.2f"|format(opportunity.profit_margin) }} sp
+                                            {% else %}
+                                                {{ "%.2f"|format(opportunity.profit_margin) }} cp
+                                            {% endif %}
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        <span class="fw-bold {% if opportunity.profit_percentage > 0 %}text-success{% elif opportunity.profit_percentage < 0 %}text-danger{% else %}text-muted{% endif %}">
+                                            {{ "%.1f"|format(opportunity.profit_percentage) }}%
+                                        </span>
+                                    </td>
+                                    <td class="text-center">
+                                        {% if opportunity.profit_percentage > 20 %}
+                                            <span class="badge bg-success">Excellent</span>
+                                        {% elif opportunity.profit_percentage > 10 %}
+                                            <span class="badge bg-warning">Good</span>
+                                        {% elif opportunity.profit_percentage > 0 %}
+                                            <span class="badge bg-info">Marginal</span>
+                                        {% else %}
+                                            <span class="badge bg-danger">Avoid</span>
+                                        {% endif %}
+                                    </td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

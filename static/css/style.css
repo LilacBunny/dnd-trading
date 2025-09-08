@@ -1,0 +1,238 @@
+/* Medieval D&D Theme Styling */
+
+:root {
+    --primary-gold: #D4AF37;
+    --secondary-bronze: #CD7F32;
+    --dark-brown: #3E2723;
+    --medieval-red: #8B0000;
+    --forest-green: #228B22;
+    --parchment: #F5F5DC;
+    --shadow: rgba(0, 0, 0, 0.15);
+}
+
+/* Global Styles */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f8f9fa;
+    background-image: 
+        radial-gradient(circle at 1px 1px, rgba(255,255,255,.15) 1px, transparent 0);
+    background-size: 20px 20px;
+    padding-top: 76px;
+}
+
+/* Navigation */
+.bg-dark-medieval {
+    background: linear-gradient(135deg, var(--dark-brown) 0%, #2C1810 100%);
+    box-shadow: 0 2px 10px var(--shadow);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: var(--primary-gold) !important;
+    text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+}
+
+.navbar-nav .nav-link {
+    color: rgba(255, 255, 255, 0.9) !important;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    border-radius: 0.25rem;
+    margin: 0 0.2rem;
+}
+
+.navbar-nav .nav-link:hover,
+.navbar-nav .nav-link.active {
+    color: var(--primary-gold) !important;
+    background-color: rgba(212, 175, 55, 0.1);
+    transform: translateY(-1px);
+}
+
+/* Main Content */
+.main-content {
+    min-height: calc(100vh - 200px);
+    padding-bottom: 2rem;
+}
+
+/* Cards */
+.card {
+    border: none;
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 15px var(--shadow);
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
+}
+
+.card-header {
+    border-bottom: 2px solid var(--primary-gold);
+    border-radius: 0.75rem 0.75rem 0 0 !important;
+    background: linear-gradient(135deg, var(--parchment) 0%, #f0f0f0 100%);
+    font-weight: 600;
+}
+
+/* Gradient Backgrounds */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--medieval-red) 0%, #a0001a 100%);
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--forest-green) 0%, #1e7e34 100%);
+}
+
+.bg-gradient-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+}
+
+.bg-gradient-dark {
+    background: linear-gradient(135deg, var(--dark-brown) 0%, #2C1810 100%);
+}
+
+/* Tables */
+.table {
+    border-radius: 0.5rem;
+    overflow: hidden;
+}
+
+.table-dark {
+    background: linear-gradient(135deg, var(--dark-brown) 0%, #2C1810 100%);
+}
+
+.table-hover tbody tr:hover {
+    background-color: rgba(212, 175, 55, 0.1);
+    transform: scale(1.01);
+    transition: all 0.2s ease;
+}
+
+/* Price Values */
+.price-value {
+    font-weight: 600;
+    font-size: 1.1rem;
+}
+
+.text-warning {
+    color: var(--primary-gold) !important;
+}
+
+/* Buttons */
+.btn {
+    border-radius: 0.5rem;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, var(--medieval-red) 0%, #a0001a 100%);
+    border: none;
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--forest-green) 0%, #1e7e34 100%);
+    border: none;
+}
+
+.btn-warning {
+    background: linear-gradient(135deg, var(--primary-gold) 0%, #b8860b 100%);
+    border: none;
+    color: var(--dark-brown);
+}
+
+/* Badges */
+.badge {
+    font-size: 0.75rem;
+    padding: 0.4em 0.8em;
+    border-radius: 0.5rem;
+    font-weight: 600;
+}
+
+/* Event Cards */
+.event-card {
+    transition: all 0.3s ease;
+    border-left: 4px solid var(--primary-gold) !important;
+}
+
+.event-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(212, 175, 55, 0.3);
+}
+
+/* Forms */
+.form-control,
+.form-select {
+    border-radius: 0.5rem;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--primary-gold);
+    box-shadow: 0 0 0 0.2rem rgba(212, 175, 55, 0.25);
+}
+
+.form-label {
+    font-weight: 600;
+    color: var(--dark-brown);
+}
+
+/* Alerts */
+.alert {
+    border-radius: 0.75rem;
+    border: none;
+    font-weight: 500;
+}
+
+.alert-success {
+    background: linear-gradient(135deg, rgba(40, 167, 69, 0.1) 0%, rgba(40, 167, 69, 0.05) 100%);
+    border-left: 4px solid var(--forest-green);
+    color: var(--forest-green);
+}
+
+.alert-danger {
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+    border-left: 4px solid var(--medieval-red);
+    color: var(--medieval-red);
+}
+
+/* Footer */
+.footer {
+    background: linear-gradient(135deg, var(--dark-brown) 0%, #2C1810 100%);
+    margin-top: auto;
+}
+
+/* Chart Containers */
+canvas {
+    border-radius: 0.5rem;
+}
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+    .navbar-brand {
+        font-size: 1.25rem;
+    }
+    
+    .main-content {
+        padding-top: 1rem;
+    }
+    
+    .table-responsive {
+        border-radius: 0.5rem;
+    }
+    
+    .btn {
+        font-size: 0.9rem;
+        padding: 0.5rem 1rem;
+    }
+}
